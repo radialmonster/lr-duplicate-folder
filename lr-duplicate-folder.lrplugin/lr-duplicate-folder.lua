@@ -36,11 +36,10 @@ LrTasks.startAsyncTask(function()
     local newFolderName = folderName .. " (copy)"
     local newPath = LrPathUtils.child(parentPath, newFolderName)
 
-    -- Check if folder already exists
-    local existsResult = LrFileUtils.exists(newPath)
-    if existsResult == "file" or existsResult == "directory" then
-        LrDialogs.message("Folder Exists", "A folder with the name '" .. newFolderName .. "' already exists.", "error")
-        return
+    -- Loop to find a unique folder name if the default already exists
+    while LrFileUtils.exists(newPath) == "file" or LrFileUtils.exists(newPath) == "directory" do
+        newFolderName = newFolderName .. " (copy)"
+        newPath = LrPathUtils.child(parentPath, newFolderName)
     end
 
     -- Create the new folder
